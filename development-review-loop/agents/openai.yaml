@@ -1,0 +1,6 @@
+interface:
+  display_name: "Development Review Loop"
+  short_description: "Plan, implement, and review within the task scope"
+  default_prompt: "Use $development-review-loop to plan and implement this software task with iterative, scoped review."
+policy:
+  allow_implicit_invocation: true
