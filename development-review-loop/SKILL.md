@@ -18,9 +18,18 @@ Keep the original conversation responsible for requirements, planning, review, a
 
 ## 1. Clarify intent and plan
 
-Turn the original request into a concise working specification: objective, expected behavior, acceptance criteria, constraints, assumptions, and explicit exclusions. Preserve the original intent; do not invent requirements while improving wording. Ask only about ambiguities that materially affect correctness or scope.
+Inspect the relevant code, interfaces, and available validation environment before planning. Preserve the original intent; ask only about ambiguities that materially affect correctness or scope. Separate observed facts, chosen decisions, and unverified assumptions so the worker need not rediscover settled questions or mistake a hypothesis for a requirement.
 
-Inspect the relevant code before writing the intervention plan. Record implementation steps and appropriate checks. Follow the project's plan location and format; otherwise keep a concise plan in the conversation. For substantial work, use an agreed internal project location if one exists. Do not introduce public planning artifacts by default.
+Use one concise plan as both the working specification and the implementation handoff. Follow the project's plan location and format; otherwise keep it in the conversation. For substantial work, use an agreed internal project location if one exists. Do not introduce public planning artifacts by default. Cover the following information, merging fields for small tasks rather than expanding them into boilerplate:
+
+- **Outcome:** observable behavior to achieve, constraints, and explicit exclusions.
+- **Intervention:** inspected file paths and symbols, intended changes and dependencies, and material decisions with brief reasons. Give enough direction to avoid repeating discovery; leave routine coding choices to the worker instead of prewriting the implementation.
+- **Acceptance:** stable IDs such as A1 and A2, each linking a required behavior to concrete verification evidence. Include applicable variants explicitly (for example, both portrait and landscape), not only in a general testing paragraph. Do not invent additional requirements or require a new automated test for every criterion.
+- **Validation:** exact commands where known, expected outcomes, and prerequisites. Distinguish required executable checks, blocked required checks, and optional or later checks. A missing environment does not turn a required check into an optional one.
+- **Replanning triggers:** discoveries that invalidate a material assumption, change requested behavior, or exceed the permitted scope; state what the worker should report before dependent work continues.
+- **Delivery:** changed files, material deviations, acceptance IDs with pass/fail/blocked status and evidence, and remaining limitations. A code inspection can be evidence when appropriate; it is not a substitute for an explicitly required runtime check.
+
+Before delegation, check that every explicit requirement maps to an acceptance criterion, relevant variants have evidence planned, and environment limits are visible. Resolve cheap, material unknowns now; avoid turning planning into a second implementation or a broad repository audit.
 
 ## 2. Capture the task baseline
 
@@ -30,7 +39,9 @@ Use the working state at task start as the review baseline, not merely HEAD. Pre
 
 ## 3. Delegate implementation
 
-Give the worker the specification, plan, relevant project instructions, baseline information, permitted scope, acceptance criteria, and required checks. Require a report of changed files, decisions, executed checks and results, and unresolved limitations.
+Give the worker the current plan once, plus workspace, relevant instruction paths, baseline references, and its bounded assignment. When the plan is in a shared file, point to its exact path instead of duplicating its contents in the handoff; otherwise include the concise plan inline. Do not assume the worker can see the parent conversation. Link supporting files and the relevant sections instead of copying full logs, source files, or exploration history. The worker must still read applicable instructions and inspect code needed to implement safely.
+
+For corrections in the same worker, send the changed decisions, outstanding finding IDs, and verification conditions rather than repeating the whole plan. If the plan changes, identify the current revision or changed sections. Request the delivery report specified above, with short evidence and paths to longer outputs where useful.
 
 Allow one implementation writer at a time. The coordinator can independently prepare acceptance checks or inspect relevant interfaces while the worker works, but must not concurrently edit the worker's files. If the runtime permits delegation only alongside independent useful work, respect that restriction; do not invent busywork to bypass it.
 
@@ -40,7 +51,7 @@ The worker implements and runs proportionate checks. It does not self-approve th
 
 Read [review-scope.md](references/review-scope.md) before each review and enforce it throughout the loop.
 
-Inspect the actual cumulative task diff and relevant code, not just the worker summary. Verify acceptance criteria and evidence from tests or other checks. Maintain findings with stable IDs, severity, file/location, concrete failure scenario, required correction, and verification condition. Distinguish mandatory findings from optional observations.
+Inspect the actual cumulative task diff and relevant code, not just the worker summary. Reconcile every acceptance ID with its evidence, including planned variants and blocked checks; a worker's pass label alone is not verification. Maintain findings with stable IDs, severity, file/location, concrete failure scenario, required correction, and verification condition. Distinguish mandatory findings from optional observations.
 
 Return actionable findings to the worker. Default to reusing the same worker with a follow-up so it retains implementation context. Start a fresh Luna High worker if the previous one is unavailable, repeatedly misses the same problem, or its context has become counterproductive. Transfer the current specification, decisions, baseline, outstanding findings, and latest check results; do not rely on lost conversation history.
 
